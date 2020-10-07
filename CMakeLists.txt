@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.15)
 
 # Get the version from the VERSION file.
 file(STRINGS "VERSION" pVersion)
-project(sp VERSION ${pVersion} LANGUAGES Fortran)
+project(sp VERSION ${pVersion} LANGUAGES Fortra)n
 
 # Set the version for the documentation.
 SET(PACKAGE_VERSION ${pVersion})

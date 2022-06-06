@@ -22,6 +22,8 @@ jobs:
 
     - name: build-sp
       run: |
+        set -x
+        doxygen --version
         cd sp
         mkdir build 
         cd build

@@ -3,14 +3,22 @@
 # Kyle Gerheiser, Ed Hartnett
 
 # This function builds, links, and runs a test program.
+find_package(w3emc)
+find_package(bacio)
 function(create_test name kind)
-  add_executable(${name}_${kind} ${name}.F90)
-
+  if(name STREQUAL "test_sptruns")
+    add_executable(${name}_${kind} ${name}.f)
+  else()
+    add_executable(${name}_${kind} ${name}.F90)
+  endif()
   # Include openMP if desired.
   if(OpenMP_Fortran_FOUND)
     target_link_libraries(${name}_${kind} PRIVATE OpenMP::OpenMP_Fortran)
   endif()
   target_link_libraries(${name}_${kind} PRIVATE sp::sp_${kind})
+  if(name STREQUAL "test_sptruns")
+    target_link_libraries(${name}_${kind} PRIVATE bacio::bacio_4 w3emc::w3emc_d)
+  endif()
   set_target_properties(${name}_${kind} PROPERTIES COMPILE_FLAGS "${fortran_${kind}_flags}")
   add_test(NAME ${name}_${kind} COMMAND ${name}_${kind})
   target_compile_definitions(${name}_${kind} PUBLIC -DKIND_${kind})  
@@ -24,4 +32,5 @@ foreach(kind ${kinds})
   create_test(test_splat ${kind})
   create_test(test_sptezv ${kind})
   create_test(test_fft ${kind})
+  create_test(test_sptruns ${kind})
 endforeach()
